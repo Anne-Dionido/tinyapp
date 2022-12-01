@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/Anne-Dionido/tinyapp/issues"
   },
-  "homepage": "https://github.com/Anne-Dionido/tinyapp#readme"
+  "homepage": "https://github.com/Anne-Dionido/tinyapp#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
 }
