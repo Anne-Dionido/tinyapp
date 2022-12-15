@@ -1,6 +1,5 @@
 const { assert } = require('chai');
 
-//HELPER FUNCTIONS
 let { randomString, getUserByEmail, urlsForUser } = require('../helpers');
 
 const testUsers = {
