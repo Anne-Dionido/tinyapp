@@ -1,13 +1,24 @@
-Dependencies
+# TinyApp Project
 
-1. Node.js
-2. Express
-3. EJS
-4. bcryptjs
-5. cookie-session
+TinyApp is a full stack web application built with Node and Express that allows users to shorten long URLs (à la bit.ly). 
+Developed by Anne Dionido during the course of Lighthouse Labs' Web Development Bootcamp. 
+Copright disclaimer: parts of the code was provided by Lighthouse Labs.
 
-Getting Started
+## Final Product
 
-Install all dependencies (using the npm install command).
+!["Screenshot of URLs page"]
+!["Screenshot of Login page"]
+!["Screenshot of Register page"]
 
-Run the development web server using the node express_server.js command.
+## Dependencies
+
+- Node.js
+- Express
+- EJS
+- bcryptjs
+- cookie-session
+
+## Getting Started
+
+- Install all dependencies (using the `npm install` command).
+- Run the development web server using the `node express_server.js` command.

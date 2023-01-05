@@ -3,29 +3,29 @@ const { assert } = require('chai');
 let { randomString, getUserByEmail, urlsForUser } = require('../helpers');
 
 const testUsers = {
-  "userRandomID": {
-    id: "userRandomID",
-    email: "user@example.com",
-    password: "purple-monkey-dinosaur"
+  "userRandomID1": {
+    id: "userRandomID1",
+    email: "user1@example.com",
+    password: "red-ocean-elephant"
   },
-  "user2RandomID": {
-    id: "user2RandomID",
+  "userRandomID2": {
+    id: "userRandomID2",
     email: "user2@example.com",
-    password: "dishwasher-funk"
+    password: "cute-cat"
   }
 };
 
 describe('getUserByEmail', function() {
   it('should return a user with valid email', function() {
-    const user = getUserByEmail("user@example.com", testUsers);
-    const expectedUserID = "userRandomID";
+    const user = getUserByEmail("user1@example.com", testUsers);
+    const expectedUserID = "userRandomID1";
 
     assert.equal(user.id, expectedUserID);
 
   });
 
   it('should return undefined with an email that is not in our database', function() {
-    const user = getUserByEmail("none@example.com", testUsers);
+    const user = getUserByEmail("noemail@example.com", testUsers);
     const expectedUserID = null;
 
     assert.equal(user, expectedUserID);
