@@ -28,28 +28,19 @@
               <% for (let id in urls) { %>
                 <tr>
                   <td>
-                    <a href="<%= urls[id].longURL %>">
+                    <a target='_blank' href='/u/<%= id %>'>
                       <%= id %>
                     </a>
                   </td>
                   <td>
-                    <a href="<%= urls[id].longURL %>">
-                      <%= urls[id].longURL %>
-                    </a>
+                    <%= urls[id].longURL %>
                   </td>
-    
                   <td>
-                    <a href="/urls/<%= id %>" class="btn btn-outline-primary">Edit
-                    </a>
+                    <form method="GET" action="/urls/<%= id %>"><button>Edit</button></form>
                   </td>
-    
                   <td>
-                    <form method="POST" action="/urls/<%= id %>/delete">
-                      <button type="Delete" class="btn btn-outline-danger">Delete
-                      </button>
-                    </form>
+                    <form method="POST" action="/urls/<%= id %>/delete"><button>Delete</button></form>
                   </td>
-    
                 </tr>
                 <% } %>
             </tbody>

@@ -47,28 +47,39 @@ const users = {
 
 
 app.get("/", (req, res) => {
-  const user_id = req.session['user_id'];
-
-  if (!user_id) {
-    return res.redirect('/login');
+  if (req.session.user_id) {
+    res.redirect("/urls");
+  } else {
+    res.redirect("/login");
   }
-
-  res.redirect('/urls');
 });
 
+//URLS => list of all of the user's URLs
+
+app.get("/urls", (req, res) => {
+  let templateVars = {
+    user: users[req.session.user_id],
+    urls: urlsForUser(req.session.user_id, urlDatabase)
+  };
+  res.render("urls_index", templateVars);
+});
 
 app.post("/urls", (req, res) => {
-  const user_id = req.session['user_id'];
-
-  if (!user_id) {
-    return res.status(400).send(`<h1>You must be logged in to use TinyApp!<h1> <a href ="/login">Back to Login</a>`);
+  if (!req.session.user_id) {
+    let templateVars = {
+      status: 401,
+      message: 'You need to be logged in to perform that action',
+      user: users[req.session.user_id]
+    }
+    res.status(401);
+    res.render("urls_error", templateVars);
+  } else {
+    const longURL = req.body.longURL;
+    const userID = req.session.user_id;
+    const shortURL = addURL(longURL, userID, urlDatabase);
+    res.redirect(`/urls/${shortURL}`);
   }
-  const urlShortCode = randomString();
-  urlDatabase[urlShortCode] = { longURL: req.body.longURL, userID: user_id };
-
-  res.redirect(`/urls/${urlShortCode}`);
 });
-
 
 
 app.get("/u/:id", (req, res) => {
@@ -185,20 +196,44 @@ app.get("/urls/:id", (req, res) => {
 });
 
 
+//REGISTER
 
-app.get("/register", (req, res) => {
-  const user_id = req.session['user_id'];
-
-  if (user_id) {
-    return res.redirect('/urls');
+app.get("/register", (req,res) => {
+  let templateVars = {
+    user: users[req.session.user_id]
+  };
+  if (templateVars.user) {
+    res.redirect("/urls");
+  } else {
+    res.render("urls_register", templateVars);
   }
-
-  const user = users[user_id];
-  const templateVars = { user, urls: urlDatabase };
-  res.render("urls_register", templateVars);
 });
 
-
+app.post("/register", (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    let templateVars = {
+      status: 401,
+      message: 'Email and/or password missing',
+      user: users[req.session.user_id]
+    }
+    res.status(401);
+    res.render("urls_error", templateVars);
+    ('Email and/or password missing');
+  } else if (getUserByEmail(email, users)) {
+    let templateVars = {
+      status: 409,
+      message: 'This email has already been registered',
+      user: users[req.session.user_id]
+    }
+    res.status(409);
+    res.render("urls_error", templateVars);
+  } else {
+    const user_id = addUser(email, password, users);
+    req.session.user_id = user_id;
+    res.redirect("/urls");
+  }
+});
 app.get("/login", (req, res) => {
   const user_id = req.session['user_id'];
 
@@ -212,7 +247,6 @@ app.get("/login", (req, res) => {
 });
 
 
-
 app.get("/urls", (req, res) => {
   const user_id = req.session['user_id'];
 
@@ -224,32 +258,6 @@ app.get("/urls", (req, res) => {
   const user = users[user_id];
   const templateVars = { user, urls: urlObj };
   res.render("urls_index", templateVars);
-});
-
-
-app.post('/register', (req, res) => {
-  const email = req.body.email;
-  const password = req.body.password;
-
-
-  if (!email || !password) {
-    return res.status(400).send(`<h1>You must enter both email and password to register!<h1> <a href ="/register">Back to Registration</a>`);
-  }
- 
-  if (getUserByEmail(email, users)) {
-    return res.status(400).send(`<h1>You've already registered this email!<h1> <a href ="/register">Back to Registration</a>`);
-  }
-
-  const user_id = randomString();
-  req.session.user_id = user_id;
-  const hashedPassword = bcrypt.hashSync(password, 10);
-  const user = {
-    id: user_id,
-    email: email,
-    password: hashedPassword
-  };
-  users[user_id] = user;
-  res.redirect('/urls');
 });
 
 
