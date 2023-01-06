@@ -155,7 +155,7 @@ app.get("/urls/new", (req, res) => {
   const user_id = req.session['user_id'];
 
   if (!user_id) {
-    res.send(`<h1>You must login first!<h1> <a href ="/login">Back to Login</a>`);
+    res.send(`<h1>Please login to perfom this action<h1> <a href ="/login">Login</a>`);
     return res.redirect('/login');
   }
 
